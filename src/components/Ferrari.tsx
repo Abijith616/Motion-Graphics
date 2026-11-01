@@ -51,192 +51,10 @@ export const FerrariWord: React.FC<{width?: number; white?: boolean; o?: number}
   <Img src={staticFile('brand/ferrari_word.svg')} style={{width, opacity: o, filter: white ? 'invert(1)' : undefined}} />
 );
 
-/* ------------------------------------------------------------------ cars */
+/* ------------------------------------------------------------------ cars (see Cars.tsx) */
 
-const Wheel: React.FC<{x: number; y: number; r: number; spin?: number; spokes?: boolean; hub?: string}> = ({x, y, r, spin = 0, spokes = true, hub = '#C9CED8'}) => (
-  <g transform={`translate(${x} ${y}) rotate(${spin})`}>
-    <circle r={r} fill="#16161C" />
-    <circle r={r * 0.72} fill="#2C2D36" />
-    {spokes ? (
-      new Array(12).fill(0).map((_, i) => <line key={i} x1="0" y1="0" x2={Math.cos((i * Math.PI) / 6) * r * 0.7} y2={Math.sin((i * Math.PI) / 6) * r * 0.7} stroke={hub} strokeWidth={1.6} />)
-    ) : (
-      <>
-        <circle r={r * 0.55} fill="#3A3C48" />
-        <rect x={-r * 0.06} y={-r * 0.55} width={r * 0.12} height={r * 1.1} fill="#55586A" />
-      </>
-    )}
-    <circle r={r * 0.16} fill={hub} />
-  </g>
-);
-
-/** 1930s Grand Prix car, side view, facing right. Optional horse badge and racing number. */
-export const VintageCar: React.FC<{size?: number; color?: string; spin?: number; badge?: boolean; num?: string; driver?: boolean; helmet?: string; flag?: string}> = ({
-  size = 420,
-  color = C.rosso,
-  spin = 0,
-  badge,
-  num,
-  driver = true,
-  helmet = '#7A4A2A',
-}) => (
-  <Svg vb="0 0 520 200" size={size}>
-    <ellipse cx="265" cy="192" rx="230" ry="7" fill="#000" opacity="0.28" />
-    {driver && (
-      <g>
-        <path d="M210 92 Q212 62 232 58 Q252 56 256 80 L256 92 Z" fill="#2B2B33" />
-        <circle cx="236" cy="56" r="20" fill={C.skin} />
-        <path d="M216 56 Q216 34 236 34 Q256 34 257 54 Z" fill={helmet} />
-        <rect x="236" y="48" width="22" height="9" rx="4" fill="#1D1D24" />
-        <circle cx="250" cy="52" r="3.5" fill="#9FD3FF" />
-        <path d="M218 62 Q206 70 198 62" stroke="#EFEFEF" strokeWidth="4" fill="none" strokeLinecap="round" />
-      </g>
-    )}
-    <path d="M28 126 Q30 100 110 94 L198 90 Q206 78 222 76 L262 76 Q270 76 274 88 L430 88 Q476 90 484 114 Q488 134 466 140 L64 142 Q28 142 28 126 Z" fill={color} />
-    <path d="M60 132 L470 132 Q476 140 466 140 L64 142 Q40 142 34 134 Z" fill="#000" opacity="0.2" />
-    <path d="M120 98 L420 96" stroke="#fff" strokeWidth="2" opacity="0.25" />
-    <ellipse cx="480" cy="114" rx="8" ry="20" fill="#2A2A30" />
-    {[0, 1, 2, 3].map((i) => (
-      <line key={i} x1="474" y1={100 + i * 8} x2="486" y2={100 + i * 8} stroke="#8A8F9E" strokeWidth="1.5" />
-    ))}
-    <path d="M290 122 L180 128 Q150 130 140 124" stroke="#C9CED8" strokeWidth="5" fill="none" strokeLinecap="round" />
-    <path d="M222 78 L232 70 L262 70 L262 78" fill="#BFE4FF" opacity="0.7" />
-    {num && (
-      <g>
-        <circle cx="96" cy="116" r="17" fill="#fff" />
-        <text x="96" y="124" textAnchor="middle" fontFamily={head} fontWeight={700} fontSize="22" fill="#111">
-          {num}
-        </text>
-      </g>
-    )}
-    {badge && (
-      <g transform="translate(330 96) scale(0.11)">
-        <path d="M0 0 L271 0 L271 230 Q271 340 135 368 Q0 340 0 230 Z" fill={C.yellow} stroke="#111" strokeWidth="14" />
-        <g transform="translate(50 30) scale(0.78)">
-          {HORSE.map((d, i) => (
-            <path key={i} d={d} transform={HORSE_T} fill="#0A0A0A" />
-          ))}
-        </g>
-      </g>
-    )}
-    <Wheel x={128} y={146} r={44} spin={spin} />
-    <Wheel x={418} y={146} r={44} spin={spin} />
-  </Svg>
-);
-
-/** Modern Formula One car, side view, facing right. */
-export const F1Car: React.FC<{size?: number; color?: string; accent?: string; spin?: number; num?: string}> = ({size = 520, color = C.rosso, accent = '#111', spin = 0, num}) => (
-  <Svg vb="0 0 640 180" size={size}>
-    <ellipse cx="320" cy="172" rx="300" ry="7" fill="#000" opacity="0.3" />
-    <rect x="22" y="38" width="16" height="74" rx="3" fill={accent} />
-    <path d="M8 34 L86 34 L86 56 L8 50 Z" fill={color} />
-    <path d="M8 34 L86 34 L86 40 L8 40 Z" fill="#fff" opacity="0.3" />
-    <path d="M40 118 Q60 92 120 86 L200 78 Q230 44 270 40 L300 42 Q310 60 312 74 L440 84 Q520 92 588 116 L612 124 L612 134 L60 136 Q40 134 40 118 Z" fill={color} />
-    <path d="M200 78 Q230 44 270 40 L300 42 L292 78 Z" fill={accent} opacity="0.85" />
-    <path d="M330 72 Q352 50 386 52 L398 74" stroke={accent} strokeWidth="7" fill="none" strokeLinecap="round" />
-    <circle cx="372" cy="70" r="13" fill="#FFD80A" />
-    <rect x="364" y="66" width="22" height="6" rx="3" fill="#111" />
-    <path d="M60 128 L600 128 L612 134 L60 136 Z" fill="#000" opacity="0.35" />
-    <path d="M560 128 L636 128 L636 140 L548 140 Z" fill={accent} />
-    <path d="M130 108 L460 104" stroke="#fff" strokeWidth="3" opacity="0.35" />
-    {num && (
-      <text x="470" y="116" textAnchor="middle" fontFamily={head} fontWeight={700} fontSize="26" fill="#fff">
-        {num}
-      </text>
-    )}
-    <Wheel x={120} y={128} r={40} spin={spin} spokes={false} />
-    <Wheel x={500} y={130} r={36} spin={spin} spokes={false} />
-  </Svg>
-);
-
-/** The 1947 125 S: bare frame + V12 engine. `bodywork` 0→1 fades in a red cycle-wing body. */
-export const Car125: React.FC<{size?: number; spin?: number; bodywork?: number; driver?: boolean; badge?: boolean}> = ({size = 460, spin = 0, bodywork = 0, driver = true, badge}) => (
-  <Svg vb="0 0 520 200" size={size}>
-    <ellipse cx="265" cy="192" rx="230" ry="7" fill="#000" opacity="0.28" />
-    {/* ladder frame */}
-    <path d="M60 128 L470 128" stroke="#9AA1B2" strokeWidth="8" strokeLinecap="round" />
-    <path d="M80 128 L120 96 L420 96 L460 128" stroke="#B8BECC" strokeWidth="5" fill="none" strokeLinejoin="round" />
-    {[150, 210, 300, 380].map((x) => (
-      <line key={x} x1={x} y1="96" x2={x - 12} y2="128" stroke="#B8BECC" strokeWidth="4" />
-    ))}
-    {/* radiator */}
-    <rect x="444" y="78" width="26" height="52" rx="5" fill="#5B6072" />
-    {[0, 1, 2, 3, 4].map((i) => (
-      <line key={i} x1="448" y1={84 + i * 9} x2="466" y2={84 + i * 9} stroke="#8D93A6" strokeWidth="2" />
-    ))}
-    {/* V12 engine */}
-    <rect x="300" y="72" width="130" height="50" rx="8" fill="#7C8294" />
-    <rect x="306" y="62" width="118" height="16" rx="6" fill={C.rosso} />
-    {new Array(6).fill(0).map((_, i) => (
-      <circle key={i} cx={318 + i * 19} cy="70" r="3" fill="#F2D9A0" />
-    ))}
-    {new Array(6).fill(0).map((_, i) => (
-      <path key={i} d={`M${314 + i * 19} 112 Q${300 + i * 12} 140 ${180 + i * 6} 136`} stroke="#C9CED8" strokeWidth="3" fill="none" opacity="0.8" />
-    ))}
-    {/* seat + steering */}
-    <path d="M190 120 L196 80 Q200 70 212 72 L218 120 Z" fill="#6B3A1F" />
-    <line x1="262" y1="104" x2="290" y2="74" stroke="#2A2A30" strokeWidth="5" />
-    <ellipse cx="262" cy="74" rx="6" ry="20" fill="none" stroke="#2A2A30" strokeWidth="5" transform="rotate(-30 262 74)" />
-    {driver && (
-      <g>
-        <path d="M206 96 Q208 66 226 62 Q246 60 248 84 L248 98 Z" fill="#E9E4D8" />
-        <circle cx="226" cy="54" r="19" fill={C.skin} />
-        <path d="M207 54 Q207 33 227 33 Q246 33 246 52 Q234 44 214 50 Z" fill="#2A1E18" />
-        <rect x="226" y="46" width="22" height="9" rx="4" fill="#1D1D24" />
-        <path d="M232 98 L258 80" stroke={C.skin} strokeWidth="9" strokeLinecap="round" />
-      </g>
-    )}
-    {/* bodywork */}
-    <g opacity={bodywork}>
-      <path d="M40 124 Q44 96 120 92 L196 90 Q206 76 222 76 L262 76 L276 88 L440 88 Q480 90 486 114 Q488 134 466 140 L64 142 Q40 140 40 124 Z" fill={C.rosso} />
-      <path d="M64 92 Q128 70 190 92 Z" fill={C.rosso} />
-      <path d="M360 92 Q420 70 480 92 Z" fill={C.rosso} />
-      <ellipse cx="482" cy="114" rx="8" ry="18" fill="#2A2A30" />
-      {badge && (
-        <g transform="translate(330 98) scale(0.1)">
-          <path d="M0 0 L271 0 L271 230 Q271 340 135 368 Q0 340 0 230 Z" fill={C.yellow} stroke="#111" strokeWidth="14" />
-          <g transform="translate(50 30) scale(0.78)">
-            {HORSE.map((d, i) => (
-              <path key={i} d={d} transform={HORSE_T} fill="#0A0A0A" />
-            ))}
-          </g>
-        </g>
-      )}
-    </g>
-    <Wheel x={128} y={146} r={42} spin={spin} />
-    <Wheel x={418} y={146} r={42} spin={spin} />
-  </Svg>
-);
-
-/** Late-1940s/50s grand-touring road car, side view facing right. */
-export const RoadCar: React.FC<{size?: number; color?: string; spin?: number; badge?: boolean}> = ({size = 440, color = C.rosso, spin = 0, badge}) => (
-  <Svg vb="0 0 520 200" size={size}>
-    <ellipse cx="260" cy="190" rx="232" ry="7" fill="#000" opacity="0.28" />
-    <path d="M30 140 Q26 112 70 104 L150 96 Q190 58 250 54 L320 56 Q356 60 390 94 L460 102 Q498 108 496 136 L492 150 L36 152 Z" fill={color} />
-    <path d="M170 96 Q200 66 250 64 L300 65 L302 96 Z" fill="#BFE4FF" opacity="0.85" />
-    <path d="M314 66 Q348 70 372 96 L314 96 Z" fill="#BFE4FF" opacity="0.85" />
-    <path d="M36 140 L494 140 L492 150 L36 152 Z" fill="#000" opacity="0.2" />
-    <path d="M480 118 L496 120" stroke="#F4F1E8" strokeWidth="6" strokeLinecap="round" />
-    <rect x="290" y="108" width="20" height="4" rx="2" fill="#E6E6E6" />
-    {badge && (
-      <g transform="translate(440 104) scale(0.06)">
-        <path d="M0 0 L271 0 L271 230 Q271 340 135 368 Q0 340 0 230 Z" fill={C.yellow} stroke="#111" strokeWidth="18" />
-      </g>
-    )}
-    <Wheel x={118} y={150} r={36} spin={spin} spokes={false} hub="#DADDE6" />
-    <Wheel x={410} y={150} r={36} spin={spin} spokes={false} hub="#DADDE6" />
-  </Svg>
-);
-
-/** Plain family car (for "it isn't a family car"). */
-export const FamilyCar: React.FC<{size?: number; color?: string}> = ({size = 360, color = '#7A8BA8'}) => (
-  <Svg vb="0 0 420 200" size={size}>
-    <ellipse cx="210" cy="188" rx="190" ry="7" fill="#000" opacity="0.25" />
-    <path d="M24 150 L24 116 Q26 96 60 92 L110 88 Q140 44 200 42 L270 44 Q320 48 344 90 L384 96 Q400 100 400 120 L400 150 Z" fill={color} />
-    <path d="M124 88 Q150 54 200 52 L232 52 L232 88 Z M244 52 L270 53 Q310 56 328 88 L244 88 Z" fill="#BFE4FF" opacity="0.8" />
-    <Wheel x={100} y={152} r={30} spokes={false} />
-    <Wheel x={320} y={152} r={30} spokes={false} />
-  </Svg>
-);
+export {VintageCar, F1Car, Car125, RoadCar, FamilyCar, Wheel, shade} from './Cars';
+import {Wheel, shade} from './Cars';
 
 /* --------------------------------------------------------------- aircraft */
 
@@ -296,7 +114,11 @@ export type CharProps = {
   look?: number;
   kid?: boolean;
   talk?: boolean;
+  /** Arm pose — acting, not decoration (see Suggestions.md: posture and hands carry emotion). */
+  arms?: Pose;
 };
+
+export type Pose = 'down' | 'wave' | 'cheer' | 'point' | 'pointL' | 'shrug';
 
 /** Round-headed flat character, front view. viewBox 200×300, head centre (100,110). */
 export const Char: React.FC<CharProps> = ({
@@ -315,22 +137,58 @@ export const Char: React.FC<CharProps> = ({
   look = 0,
   kid,
   talk,
+  arms = 'down',
 }) => {
   const frame = useCurrentFrame();
+  const gid = 'cb' + React.useId().replace(/[^a-zA-Z0-9]/g, '');
   const b = (frame + seed * 37) % 110 < 4 ? 0.12 : 1;
   const br = Math.sin(frame / 18 + seed) * 2;
   const hy = 110 + br * 0.6;
   const mouthOpen = talk ? 3 + Math.abs(Math.sin(frame / 2.6 + seed)) * 7 : 0;
   const ink = '#1A1A2E';
   const bodyTop = kid ? 190 : 168;
+  const bodyC = outfit === 'overalls' ? '#3D5A8A' : outfit === 'racer' ? '#E9E4D8' : shirt;
+  // arms: angle from straight down, positive = away from the body
+  const sway = Math.sin(frame / 18 + seed) * 3;
+  const pose: Record<Pose, [number, number]> = {
+    down: [12 + sway, 12 - sway],
+    wave: [12 + sway, 145 + Math.sin(frame / 3.2 + seed) * 22],
+    cheer: [152 + Math.sin(frame / 4 + seed) * 9, 152 + Math.sin(frame / 4 + seed + 1.3) * 9],
+    point: [12 + sway, 90],
+    pointL: [90, 12 - sway],
+    shrug: [58 + sway * 0.5, 58 - sway * 0.5],
+  };
+  const [aL, aR] = pose[arms];
+  const armLen = kid ? 62 : 82;
+  const shoulderY = bodyTop + (kid ? 26 : 30) + br;
+  const armEnd = (sx: number, a: number, side: number) => [sx + side * Math.sin((a * Math.PI) / 180) * armLen, shoulderY + Math.cos((a * Math.PI) / 180) * armLen];
+  const sleeve = shade(bodyC, -0.18);
+  const armW = kid ? 17 : 23;
+  const Arm = ({sx, a, side}: {sx: number; a: number; side: number}) => {
+    const [ex, ey] = armEnd(sx, a, side);
+    const mx = (sx + ex) / 2 + side * 6;
+    const my = (shoulderY + ey) / 2;
+    return (
+      <g>
+        <path d={`M${sx} ${shoulderY} Q${mx} ${my} ${ex} ${ey}`} stroke={sleeve} strokeWidth={armW} strokeLinecap="round" fill="none" />
+        <circle cx={ex} cy={ey} r={kid ? 9 : 11.5} fill={skin} />
+      </g>
+    );
+  };
   return (
     <Svg vb="0 0 200 300" size={size}>
+      <defs>
+        <linearGradient id={gid} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor={shade(bodyC, 0.12)} />
+          <stop offset="1" stopColor={shade(bodyC, -0.28)} />
+        </linearGradient>
+      </defs>
       <ellipse cx="100" cy="292" rx="70" ry="8" fill="#000" opacity="0.25" />
       {/* body */}
       {outfit === 'dress' ? (
-        <path d={`M40 292 Q50 ${bodyTop + br} 100 ${bodyTop - 4 + br} Q150 ${bodyTop + br} 160 292 Z`} fill={shirt} />
+        <path d={`M40 292 Q50 ${bodyTop + br} 100 ${bodyTop - 4 + br} Q150 ${bodyTop + br} 160 292 Z`} fill={`url(#${gid})`} />
       ) : (
-        <path d={`M${kid ? 46 : 30} 292 Q${kid ? 46 : 30} ${bodyTop + 4 + br} 100 ${bodyTop + br} Q${kid ? 154 : 170} ${bodyTop + 4 + br} ${kid ? 154 : 170} 292 Z`} fill={outfit === 'overalls' ? '#3D5A8A' : outfit === 'racer' ? '#E9E4D8' : shirt} />
+        <path d={`M${kid ? 46 : 30} 292 Q${kid ? 46 : 30} ${bodyTop + 4 + br} 100 ${bodyTop + br} Q${kid ? 154 : 170} ${bodyTop + 4 + br} ${kid ? 154 : 170} 292 Z`} fill={`url(#${gid})`} />
       )}
       {outfit === 'suit' && (
         <>
@@ -358,6 +216,10 @@ export const Char: React.FC<CharProps> = ({
       )}
       {outfit === 'racer' && <path d={`M70 ${bodyTop + 6} Q100 ${bodyTop + 22} 130 ${bodyTop + 6}`} stroke={C.red} strokeWidth="8" fill="none" />}
       {outfit === 'dress' && <path d={`M76 ${bodyTop + 2 + br} Q100 ${bodyTop + 24} 124 ${bodyTop + 2 + br}`} stroke="#F4E6C8" strokeWidth="6" fill="none" />}
+      <Arm sx={kid ? 62 : 48} a={aL} side={-1} />
+      <Arm sx={kid ? 138 : 152} a={aR} side={1} />
+      {/* soft chin shadow on the collar */}
+      <ellipse cx="100" cy={hy + (kid ? 56 : 60)} rx="34" ry="9" fill="#000" opacity="0.13" />
       {/* hair back (bun/wavy) */}
       {hairStyle === 'bun' && <circle cx="100" cy={hy - 66} r="22" fill={hair} />}
       {hairStyle === 'wavy' && <path d={`M34 ${hy + 30} Q30 ${hy - 70} 100 ${hy - 70} Q170 ${hy - 70} 166 ${hy + 30} Z`} fill={hair} />}

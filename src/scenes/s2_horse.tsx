@@ -18,7 +18,7 @@ const Driver: React.FC = () => {
   return (
     <>
       <Pop at={Q.becomes} x={600} y={600}>
-        <Char size={330} outfit="racer" hat="helmet" hair={ENZO.hair} mood="happy" seed={3} look={0.6} />
+        <Char size={330} outfit="racer" hat="helmet" hair={ENZO.hair} mood="happy" seed={3} look={0.6} arms={fr > f(Q.alfa) ? 'wave' : 'down'} />
       </Pop>
       <Pop at={Q.becomes + 0.4} x={1250} y={680}>
         <VintageCar size={700} color={C.rosso} num="1" driver={false} />
@@ -50,7 +50,7 @@ const Ravenna: React.FC = () => {
         <CheckFlag size={220} wave={fr / 4} />
       </Place>
       <Place x={x} y={760} w={600} h={260}>
-        <VintageCar size={520} color={C.rosso} num="1" spin={x * 1.4} />
+        <VintageCar size={520} color={C.rosso} num="1" spin={x * 1.4} blur={1 - prog(fr, Q.wins + 0.15, 0.5)} />
       </Place>
       <Pop at={Q.wins + 0.5} x={1460} y={360} float={6}>
         <Trophy size={200} label="1st" />
@@ -80,7 +80,7 @@ const Couple: React.FC = () => {
     <>
       <Ground y={860} color="#202848" />
       <Pop at={Q.after} x={420} y={640}>
-        <Char size={320} outfit="suit" shirt="#2B2F45" hair={ENZO.hair} hairStyle="slick" mood="happy" seed={3} look={1} />
+        <Char size={320} outfit="suit" shirt="#2B2F45" hair={ENZO.hair} hairStyle="slick" mood="happy" seed={3} look={1} arms={fr > f(Q.couple) && fr < f(Q.count + 1.5) ? 'wave' : 'down'} />
       </Pop>
       <Pop at={Q.after + 0.2} x={420} y={900}>
         <Label text="Enzo" size={32} color={C.ink} />
@@ -207,7 +207,7 @@ const Gift: React.FC = () => {
     <>
       <Ground y={860} color="#202848" />
       <Pop at={Q.mother} x={1480} y={640}>
-        <Char size={310} outfit="dress" shirt="#5B2240" hair="#8C8C8C" hairStyle="bun" mood="neutral" seed={8} look={-1} talk={t > Q.mother && t < Q.luck + 1} />
+        <Char size={310} outfit="dress" shirt="#5B2240" hair="#8C8C8C" hairStyle="bun" mood="neutral" seed={8} look={-1} talk={t > Q.mother && t < Q.luck + 1} arms={t > Q.prancing - 0.3 && t < Q.luck + 1 ? 'shrug' : 'down'} />
       </Pop>
       <Pop at={Q.mother} x={480} y={640}>
         <Char size={320} outfit="suit" shirt="#2B2F45" hair={ENZO.hair} hairStyle="slick" mood={t > Q.yes ? 'happy' : 'neutral'} seed={3} look={1} />

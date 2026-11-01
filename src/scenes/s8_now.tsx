@@ -81,7 +81,7 @@ const Loop: React.FC = () => {
       <Pop at={Q.customers} x={960} y={350}>
         <div style={{display: 'flex', gap: 10}}>
           {[0, 1, 2].map((i) => (
-            <Char key={i} size={130} outfit="suit" shirt={['#2C3E50', '#4A3B5C', '#3D4F3A'][i]} hair={['#4A3426', '#C9A24D', '#2A1E18'][i]} hairStyle={i === 1 ? 'wavy' : 'slick'} hat={i === 0 ? 'fedora' : 'none'} mood="happy" seed={60 + i} />
+            <Char key={i} size={130} outfit="suit" shirt={['#2C3E50', '#4A3B5C', '#3D4F3A'][i]} hair={['#4A3426', '#C9A24D', '#2A1E18'][i]} hairStyle={i === 1 ? 'wavy' : 'slick'} hat={i === 0 ? 'fedora' : 'none'} mood="happy" seed={60 + i} arms={fr > f(Q.customers + 0.3 + i * 0.2) ? 'wave' : 'down'} />
           ))}
         </div>
       </Pop>
@@ -258,12 +258,12 @@ const Closing: React.FC = () => {
         <SpeedLines o={t > Q.watched && t < Q.watched + 1.3 ? 1 : t > Q.todayteam + 0.4 && t < Q.todayteam + 1.4 ? 1 : 0} y0={760} y1={900} n={18} />
         {t < Q.watched + 1.4 && (
           <Place x={passA} y={820} w={600} h={260}>
-            <VintageCar size={520} color={C.rosso} num="4" spin={passA * 1.6} />
+            <VintageCar size={520} color={C.rosso} num="4" spin={passA * 1.6} blur={1} />
           </Place>
         )}
         {t > Q.todayteam + 0.3 && (
           <Place x={passB} y={830} w={700} h={240}>
-            <F1Car size={640} color={C.rosso} spin={passB} />
+            <F1Car size={640} color={C.rosso} spin={passB} blur={1} />
           </Place>
         )}
       </div>

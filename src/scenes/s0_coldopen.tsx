@@ -172,7 +172,7 @@ const World: React.FC<{t: number}> = ({t}) => {
         const x = carX(t, c.x0, c.v);
         return (
           <At key={i} x={x} y={c.lane - 30} s={0.62 * c.s} o={carsO}>
-            <F1Car size={420} color={c.c} accent={c.c === C.silver ? '#1B1F2A' : '#111'} spin={(x / 38) * 57} />
+            <F1Car size={420} color={c.c} accent={c.c === C.silver ? '#1B1F2A' : '#111'} spin={(x / 38) * 57} blur={0.9} />
           </At>
         );
       })}
@@ -234,8 +234,8 @@ const World: React.FC<{t: number}> = ({t}) => {
           </div>
         </div>
       </At>
-      <At x={yr(1947) + interpolate(prog(fr, Q.firstcar - 0.3, 1.2, outE), [0, 1], [900, 0])} y={-78} s={0.8} o={fadeAll * prog(fr, Q.firstcar - 0.3, 0.3)}>
-        <Car125 size={420} bodywork={1} badge driver spin={-prog(fr, Q.firstcar - 0.3, 1.2, outE) * 900} />
+      <At x={yr(1947) + interpolate(prog(fr, Q.firstcar - 0.3, 1.2, outE), [0, 1], [-900, 0])} y={-78} s={0.8} o={fadeAll * prog(fr, Q.firstcar - 0.3, 0.3)}>
+        <Car125 size={420} bodywork={1} badge driver spin={prog(fr, Q.firstcar - 0.3, 1.2, outE) * 900} blur={0.8 * (1 - prog(fr, Q.firstcar, 0.9))} />
       </At>
 
       {/* ---- 18 years arc */}
@@ -282,7 +282,7 @@ const World: React.FC<{t: number}> = ({t}) => {
         return (
           <React.Fragment key={i}>
             <At x={yr(1938) - 610 + i * 244} y={700 + nod} s={pop(fr, at, 12)} o={fadeAll}>
-              <Char size={210} outfit="shirt" shirt={fan ? C.rosso : [C.blue, C.mint, C.purple][i - 3]} hair={['#2A1E18', '#6B4A2E', '#C9A24D', '#1A1A1A', '#8A5A34', '#3A2A1E'][i]} hairStyle={i % 2 ? 'wavy' : 'short'} mood={fan ? 'smirk' : 'worried'} seed={i} look={fan ? 0.5 : -0.4} />
+              <Char size={210} outfit="shirt" shirt={fan ? C.rosso : [C.blue, C.mint, C.purple][i - 3]} hair={['#2A1E18', '#6B4A2E', '#C9A24D', '#1A1A1A', '#8A5A34', '#3A2A1E'][i]} hairStyle={i % 2 ? 'wavy' : 'short'} mood={fan ? 'smirk' : 'worried'} seed={i} look={fan ? 0.5 : -0.4} arms={fan ? (t > Q.know ? 'cheer' : 'down') : t > Q.how - 0.6 ? 'shrug' : 'down'} />
             </At>
             <At x={yr(1938) - 560 + i * 244} y={530} s={pop(fr, fan ? Q.know + i * 0.15 : Q.how - 0.6 + (i - 3) * 0.15, 10)} o={fadeAll}>
               <div style={{width: 76, height: 76, borderRadius: 38, background: fan ? C.mint : C.yellow, color: C.bg0, fontFamily: head, fontWeight: 700, fontSize: 52, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 8px 24px rgba(0,0,0,0.35)'}}>

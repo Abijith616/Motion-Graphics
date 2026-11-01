@@ -87,7 +87,7 @@ const Car815: React.FC = () => {
       {[0, 1].map((i) => (
         <Place key={i} x={560 + i * 760 + drive} y={760} w={720} h={300}>
           <div style={{position: 'relative'}}>
-            <VintageCar size={660} color="#B8141E" num={String(i ? 66 : 65)} helmet={i ? '#5C4026' : '#7A4A2A'} spin={drive} />
+            <VintageCar size={660} color="#B8141E" num={String(i ? 66 : 65)} helmet={i ? '#5C4026' : '#7A4A2A'} spin={drive} blur={Math.min(1, -drive / 220)} />
             {t > Q.c815 - 0.2 && (
               <div style={{position: 'absolute', left: 330, top: 130, transform: `scale(${pop(fr, Q.c815 + i * 0.1, 10)})`, background: C.ink, color: C.bg0, fontFamily: head, fontWeight: 700, fontSize: 44, padding: '0 14px', borderRadius: 8}}>815</div>
             )}
@@ -96,7 +96,7 @@ const Car815: React.FC = () => {
       ))}
       <Pop at={Q.ascari} x={1320} y={470} out={Q.firstbuilt - 0.3}>
         <div style={{display: 'flex', alignItems: 'center', gap: 16}}>
-          <Char size={150} outfit="racer" hat="helmet" hair="#2A1E18" mood="happy" seed={40} />
+          <Char size={150} outfit="racer" hat="helmet" hair="#2A1E18" mood="happy" seed={40} arms="wave" />
           <div>
             <div style={{fontFamily: serif, fontWeight: 900, fontSize: 46, color: C.ink}}>Alberto Ascari</div>
             <div style={{fontFamily: body, fontWeight: 900, fontSize: 26, color: C.muted, letterSpacing: 3}}>YOUNG DRIVER</div>

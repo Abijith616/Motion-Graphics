@@ -125,7 +125,7 @@ const FirstRace: React.FC = () => {
         <Crowd n={20} width={2100} color="#2A3158" seed={7} cheer={prog(fr, Q.roaring, 0.5)} />
       </Place>
       <Pop at={Q.firstrace + 0.1} x={360} y={640}>
-        <Char size={240} kid outfit="shirt" shirt={KID.shirt} hair={KID.hair} hairStyle="kid" mood={awe} seed={2} look={1} />
+        <Char size={240} kid outfit="shirt" shirt={KID.shirt} hair={KID.hair} hairStyle="kid" mood={awe} seed={2} look={1} arms={fr > f(Q.roaring + 0.3) ? 'cheer' : 'down'} />
       </Pop>
       <Road y={800} speed={0} />
       <SpeedLines o={prog(fr, Q.roaring - 0.2, 0.3)} y0={760} y1={900} n={20} />
@@ -134,7 +134,7 @@ const FirstRace: React.FC = () => {
         if (t < c || t > c + 1.3) return null;
         return (
           <Place key={i} x={x} y={820 - (i % 2) * 14} w={600} h={260}>
-            <VintageCar size={520} color={[C.rosso, '#2A5BB8', '#E8E2D2', '#1F7A3A'][i]} num={String([4, 12, 7, 21][i])} spin={x * 1.6} />
+            <VintageCar size={520} color={[C.rosso, '#2A5BB8', '#E8E2D2', '#1F7A3A'][i]} num={String([4, 12, 7, 21][i])} spin={x * 1.6} blur={1} />
           </Place>
         );
       })}
@@ -251,7 +251,7 @@ const Night: React.FC = () => {
         );
       })}
       <Pop at={Q.summer + 0.2} x={760} y={720}>
-        <Char size={240} kid outfit="shirt" shirt={KID.shirt} hair={KID.hair} hairStyle="kid" mood={t > Q.swat ? 'angry' : 'neutral'} seed={2} look={0.6} />
+        <Char size={240} kid outfit="shirt" shirt={KID.shirt} hair={KID.hair} hairStyle="kid" mood={t > Q.swat ? 'angry' : 'neutral'} seed={2} look={0.6} arms={t > Q.swat && t < Q.friend ? 'wave' : 'down'} />
       </Pop>
       {t > Q.swat - 0.2 && (
         <div style={{position: 'absolute', left: 840, top: 520, transformOrigin: '0% 100%', transform: `rotate(${-30 + swing}deg)`, opacity: prog(fr, Q.swat - 0.2, 0.2)}}>
@@ -259,7 +259,7 @@ const Night: React.FC = () => {
         </div>
       )}
       <Pop at={Q.friend} x={1260} y={720}>
-        <Char size={240} kid outfit="shirt" shirt="#8A5A34" hair="#7A4B2E" hairStyle="short" mood="happy" seed={6} look={-0.8} talk={t > Q.grow && t < Q.think} />
+        <Char size={240} kid outfit="shirt" shirt="#8A5A34" hair="#7A4B2E" hairStyle="short" mood="happy" seed={6} look={-0.8} talk={t > Q.grow && t < Q.think} arms={t > Q.grow && t < Q.think ? 'shrug' : 'down'} />
       </Pop>
       <Pop at={Q.friend + 0.3} x={1260} y={900}>
         <Label text="best friend" size={28} />
@@ -277,7 +277,7 @@ const Points: React.FC = () => {
   return (
     <>
       <Pop at={Q.think} x={480} y={640}>
-        <Char size={330} kid outfit="shirt" shirt={KID.shirt} hair={KID.hair} hairStyle="kid" mood="smirk" seed={2} look={1} />
+        <Char size={330} kid outfit="shirt" shirt={KID.shirt} hair={KID.hair} hairStyle="kid" mood="smirk" seed={2} look={1} arms={fr > f(Q.points) ? 'point' : 'down'} />
       </Pop>
       <Caption at={Q.think} text="No hesitation." x={480} y={330} size={46} color={C.ink} />
       <Pop at={Q.points - 0.4} x={1250} y={540} rot={3}>
@@ -323,7 +323,7 @@ const Racer: React.FC = () => {
       </Pop>
       <Cross at={Q.notstart + 0.5} x={1360} y={560} size={380} />
       <Pop at={Q.aracer} x={960} y={600} s={1.1}>
-        <Char size={300} outfit="racer" hat="helmet" hair={KID.hair} mood="happy" seed={4} />
+        <Char size={300} outfit="racer" hat="helmet" hair={KID.hair} mood="happy" seed={4} arms="cheer" />
       </Pop>
       <Glow x={960} y={600} r={330} color={C.red} o={0.4 * end} />
       <Caption at={Q.aracer + 0.1} text={<span style={{fontFamily: head, fontSize: 70, letterSpacing: 8, color: C.yellow}}>A RACER.</span>} y={960} />

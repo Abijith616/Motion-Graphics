@@ -174,10 +174,38 @@ export const Title: React.FC<{at: number; out?: number; text: React.ReactNode; y
   );
 };
 
-/** Ground strip at the bottom of the frame. */
-export const Ground: React.FC<{y?: number; color?: string; o?: number}> = ({y = 860, color = '#141B36', o = 1}) => (
-  <div style={{position: 'absolute', left: -100, right: -100, top: y, bottom: -100, background: `linear-gradient(180deg, ${color} 0%, ${C.bg0} 100%)`, opacity: o, borderTop: `4px solid rgba(255,255,255,0.06)`}} />
-);
+/** Rolling hill silhouette (repeating), for background depth layers. */
+const hills = (w: number, amp: number, base: number, seed: number) => {
+  let d = `M0 ${base}`;
+  for (let x = 0; x <= w; x += 120) {
+    const y = base - amp * (0.45 + 0.55 * random(`h${seed}${x % 1920}`));
+    d += ` Q${x + 60} ${y - amp * 0.3} ${x + 120} ${y}`;
+  }
+  return d + ` L${w + 120} ${base + 400} L0 ${base + 400} Z`;
+};
+
+/**
+ * Ground strip with two atmospheric hill layers behind it (far = paler and slower).
+ * Restrained parallax: depth without competing with the subject.
+ */
+export const Ground: React.FC<{y?: number; color?: string; o?: number; depth?: boolean}> = ({y = 860, color = '#141B36', o = 1, depth = true}) => {
+  const fr = useCurrentFrame();
+  return (
+    <>
+      {depth && (
+        <svg width={W} height={H} style={{position: 'absolute', left: 0, top: 0, opacity: o, pointerEvents: 'none'}}>
+          <g transform={`translate(${-((fr * 0.15) % 1920)} 0)`}>
+            <path d={hills(3960, 90, y - 40, 1)} fill="#B9C6F0" opacity={0.06} />
+          </g>
+          <g transform={`translate(${-((fr * 0.35) % 1920)} 0)`}>
+            <path d={hills(3960, 60, y - 6, 2)} fill={color} opacity={0.55} />
+          </g>
+        </svg>
+      )}
+      <div style={{position: 'absolute', left: -100, right: -100, top: y, bottom: -100, background: `linear-gradient(180deg, ${color} 0%, ${C.bg0} 100%)`, opacity: o, borderTop: `4px solid rgba(255,255,255,0.06)`}} />
+    </>
+  );
+};
 
 /** Road (side view) with moving dashes. */
 export const Road: React.FC<{y?: number; speed?: number; o?: number; color?: string}> = ({y = 820, speed = 0, o = 1, color = '#3A3A44'}) => {

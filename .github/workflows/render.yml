@@ -1,7 +1,15 @@
 name: Render video (4K 60fps)
 
 on:
-  workflow_dispatch: # run from the Actions tab — always renders the full original video, 3840x2160 @ 60 fps
+  workflow_dispatch: # manual run from the Actions tab
+  push: # every push that changes the video re-renders it (3840x2160 @ 60 fps)
+    branches: [main]
+    paths: ['src/**', 'public/**', 'package.json', 'package-lock.json', 'remotion.config.ts', '.github/workflows/render.yml']
+
+# a newer push supersedes an in-progress render
+concurrency:
+  group: render-${{ github.ref }}
+  cancel-in-progress: true
 
 env:
   COMP: ScuderiaFerrari

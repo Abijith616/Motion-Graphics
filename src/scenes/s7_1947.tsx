@@ -31,7 +31,7 @@ const GateScene: React.FC = () => {
       </Place>
       <Ground y={790} color="#262A3A" />
       <Place x={cx} y={760} w={760} h={320} s={cs} o={prog(fr, Q.drives, 0.3)}>
-        <Car125 size={720} spin={roll * 600} />
+        <Car125 size={720} spin={roll * 600} blur={0.35 * (1 - roll)} dust={0.5 * (1 - roll)} />
       </Place>
       {/* callouts */}
       <svg width="1920" height="1080" style={{position: 'absolute', left: 0, top: 0, opacity: call}}>

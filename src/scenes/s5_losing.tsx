@@ -25,11 +25,11 @@ const Germans: React.FC = () => {
         <SpeedLines y0={700} y1={880} n={18} />
         {[0, 1].map((i) => (
           <Place key={i} x={interpolate(t, [Q.german, Q.german + 2.5], [-300, 1300 + i * 260], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}) - i * 380} y={760 - i * 16} w={560} h={240}>
-            <VintageCar size={500} color={C.silver} num={i ? '4' : '2'} helmet="#EEE" spin={race * 1.5} />
+            <VintageCar size={500} color={C.silver} num={i ? '4' : '2'} helmet="#EEE" spin={race * 1.5} blur={1} />
           </Place>
         ))}
         <Place x={interpolate(t, [Q.german, Q.german + 2.5], [-300, 520], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})} y={780} w={560} h={240}>
-          <VintageCar size={460} color="#B8141E" num="6" spin={race} />
+          <VintageCar size={460} color="#B8141E" num="6" spin={race} blur={0.8} />
         </Place>
       </div>
       <Pop at={Q.german + 0.4} x={1300} y={190}>
@@ -221,7 +221,7 @@ const FortyOne: React.FC = () => {
       <Bubble at={Q.boysaid + 0.3} x={520} y={420} width={420} size={38} italic text="“I'll be a racer.”" />
       <Arrow at={Q.boysaid + 0.9} d="M 640 660 L 1180 660" color={C.dim} width={8} dash dur={1} />
       <Pop at={Q.fortyone - 0.4} x={1430} y={620}>
-        <Char size={300} outfit="suit" shirt="#2B2F45" hair={ENZO.hair} hairStyle="slick" mood="sad" seed={3} />
+        <Char size={300} outfit="suit" shirt="#2B2F45" hair={ENZO.hair} hairStyle="slick" mood="sad" seed={3} arms={fr > f(Q.notallowed) ? 'shrug' : 'down'} />
       </Pop>
       <div style={{position: 'absolute', left: 760, top: 520, width: 300, textAlign: 'center', fontFamily: serif, fontWeight: 900, fontSize: 110, color: C.yellow, opacity: prog(fr, Q.boysaid + 0.8, 0.3)}}>{age}</div>
       <div style={{position: 'absolute', left: 760, top: 650, width: 300, textAlign: 'center', fontFamily: body, fontWeight: 900, fontSize: 28, color: C.muted, letterSpacing: 4, opacity: prog(fr, Q.boysaid + 0.8, 0.3)}}>YEARS OLD</div>

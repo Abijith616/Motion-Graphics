@@ -147,7 +147,7 @@ const Burns: React.FC = () => {
         </div>
       </Place>
       <Place x={1300 + exit * 1000} y={640} w={700} h={300} s={pop(fr, Q.pulls - 0.2, 12)}>
-        <VintageCar size={620} color="#B8141E" num="1" spin={exit * 900} />
+        <VintageCar size={620} color="#B8141E" num="1" spin={exit * 900} blur={Math.min(1, exit * 3)} />
       </Place>
       <Pop at={Q.pulls} x={1300} y={420}>
         <div style={{opacity: 1 - exit}}>
@@ -229,7 +229,7 @@ const AlfaTeam: React.FC = () => {
       </Pop>
       <Pop at={Q.nofactory} x={960} y={300}>
         <div style={{position: 'relative', display: 'flex', alignItems: 'center', gap: 20}}>
-          <Char size={170} outfit="suit" shirt="#2B2F45" hair={ENZO.hair} hairStyle="slick" mood="neutral" seed={3} />
+          <Char size={170} outfit="suit" shirt="#2B2F45" hair={ENZO.hair} hairStyle="slick" mood="neutral" seed={3} arms="shrug" />
           <div style={{position: 'relative'}}>
             <Factory size={160} smoke={false} />
           </div>

@@ -41,7 +41,7 @@ const Dealer: React.FC = () => {
         <VintageCar size={460} color={C.rosso} driver={false} />
       </Pop>
       <Pop at={Q.selling + 0.2} x={1660} y={600}>
-        <Char size={260} outfit="suit" shirt="#2B2F45" hair={ENZO.hair} hairStyle="slick" mood="happy" seed={3} look={-0.8} />
+        <Char size={260} outfit="suit" shirt="#2B2F45" hair={ENZO.hair} hairStyle="slick" mood="happy" seed={3} look={-0.8} arms="pointL" />
       </Pop>
       <Pop at={Q.selling + 0.4} x={1340} y={430} float={6}>
         <div style={{display: 'flex', gap: 10}}>
@@ -192,7 +192,7 @@ const Idea: React.FC = () => {
       </Pop>
       <Words text="Here's the idea." at={Q.idea + 0.2} y={350} size={56} out={Q.buy} />
       <Place x={960 + crowd * 0} y={600} w={400} h={500} s={pop(fr, Q.buy, 12)}>
-        <Char size={260} {...TADINI} mood={t > Q.oneman ? 'shock' : t > Q.needs ? 'worried' : 'happy'} seed={12} />
+        <Char size={260} {...TADINI} mood={t > Q.oneman ? 'shock' : t > Q.needs ? 'worried' : 'happy'} seed={12} arms={t > Q.oneman ? 'shrug' : 'down'} />
       </Place>
       <Pop at={Q.buy + 0.4} x={1180} y={760}>
         <VintageCar size={300} color={C.rosso} driver={false} />
@@ -232,7 +232,7 @@ const Share: React.FC = () => {
       {[0, 1, 2].map((i) => (
         <Place key={i} x={520 + i * 440 + go * 1600} y={770} w={460} h={200} s={pop(fr, Q.owns + 0.3 + i * 0.2, 12)}>
           <div style={{filter: t > Q.ready ? `drop-shadow(0 0 ${12 + 8 * Math.sin(fr / 5 + i)}px rgba(255,216,10,0.5))` : undefined}}>
-            <VintageCar size={420} color={C.rosso} num={String(i + 2)} driver={t > Q.gentlemen + 0.4 + i * 0.2} spin={go * 900} />
+            <VintageCar size={420} color={C.rosso} num={String(i + 2)} driver={t > Q.gentlemen + 0.4 + i * 0.2} spin={go * 900} blur={Math.min(1, go * 2)} />
           </div>
         </Place>
       ))}
@@ -253,7 +253,7 @@ const Share: React.FC = () => {
       </Pop>
       {[0, 1, 2].map((i) => (
         <Place key={i} x={180 + i * 150} y={560} w={200} h={300} s={pop(fr, Q.gentlemen + i * 0.15, 12)} o={1 - prog(fr, Q.gentlemen + 0.4 + i * 0.2, 0.25)}>
-          <Char size={180} outfit="suit" shirt={['#2C3E50', '#4A3B5C', '#3D4F3A'][i]} hat={i === 1 ? 'fedora' : 'none'} hair={['#4A3426', '#6B4A2E', '#2A1E18'][i]} hairStyle="slick" mustache={i !== 2} mood="happy" seed={20 + i} />
+          <Char size={180} outfit="suit" shirt={['#2C3E50', '#4A3B5C', '#3D4F3A'][i]} hat={i === 1 ? 'fedora' : 'none'} hair={['#4A3426', '#6B4A2E', '#2A1E18'][i]} hairStyle="slick" mustache={i !== 2} mood="happy" seed={20 + i} arms="wave" />
         </Place>
       ))}
       <Caption at={Q.gentlemen} text={<>The gentlemen just <span style={{color: C.yellow}}>turn up and drive.</span></>} y={1000} size={48} color={C.ink} />
@@ -317,7 +317,7 @@ const Signed: React.FC = () => {
       </div>
       <Pop at={Q.chairman} x={840} y={560}>
         <div style={{position: 'relative'}}>
-          <Char size={300} {...TADINI} mood="smirk" seed={12} />
+          <Char size={300} {...TADINI} mood="smirk" seed={12} arms="wave" />
           <div style={{position: 'absolute', left: 30, top: 300, background: C.gold, color: C.bg0, fontFamily: head, fontWeight: 700, fontSize: 36, padding: '4px 20px', borderRadius: 24, letterSpacing: 3}}>CHAIRMAN</div>
         </div>
       </Pop>
