@@ -1,10 +1,10 @@
-name: Render video
+name: Render video (4K 60fps)
 
 on:
   workflow_dispatch:
     inputs:
       scale:
-        description: 'Output scale (2 = 3840x2160 4K, 1 = 1920x1080)'
+        description: 'Output scale (2 = 3840x2160 4K, 1 = 1920x1080). Always 60 fps.'
         type: choice
         options: ['2', '1']
         default: '2'
@@ -14,17 +14,17 @@ on:
 
 env:
   COMP: ScuderiaFerrari
-  CHUNKS: 8
+  CHUNKS: 16
 
 jobs:
   # ---- video in parallel chunks (each renders a frame range, muted)
   video:
     runs-on: ubuntu-latest
-    timeout-minutes: 340
+    timeout-minutes: 350
     strategy:
       fail-fast: true
       matrix:
-        chunk: [0, 1, 2, 3, 4, 5, 6, 7]
+        chunk: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -39,7 +39,7 @@ jobs:
           python3 - <<'PY' >> "$GITHUB_OUTPUT"
           import json, math, os
           end = json.load(open('src/cues.json'))['_end']
-          total = math.ceil((end + 4.5) * 30)          # must match DURATION_SEC in src/Video.tsx
+          total = math.ceil((end + 4.5) * 60)          # 60 fps; must match DURATION_SEC in src/Video.tsx and FPS in src/theme.ts
           n = int(os.environ['CHUNKS']); i = int(${{ matrix.chunk }})
           size = math.ceil(total / n)
           a, b = i * size, min(total, (i + 1) * size) - 1
@@ -51,7 +51,7 @@ jobs:
           npx remotion render src/index.ts "$COMP" "out/chunk-${{ matrix.chunk }}.mp4" \
             --frames=${{ steps.range.outputs.frames }} --muted \
             --scale=${{ inputs.scale }} --codec=h264 --crf=${{ inputs.crf }} \
-            --gl=swangle --concurrency=4 --log=info
+            --gl=swangle --concurrency=100% --log=info
       - uses: actions/upload-artifact@v4
         with:
           name: chunk-${{ matrix.chunk }}
@@ -92,11 +92,12 @@ jobs:
           for i in $(seq 0 $((CHUNKS - 1))); do echo "file 'parts/chunk-$i.mp4'"; done > list.txt
           ffmpeg -y -f concat -safe 0 -i list.txt -i parts/audio.wav \
             -map 0:v -map 1:a -c:v copy -c:a aac -b:a 320k -movflags +faststart \
-            "ScuderiaFerrari-x${{ inputs.scale }}.mp4"
+            "ScuderiaFerrari-x${{ inputs.scale }}-60fps.mp4"
+          ffprobe -v error -select_streams v:0 -show_entries stream=width,height,r_frame_rate,nb_frames -of compact "ScuderiaFerrari-x${{ inputs.scale }}-60fps.mp4" | tee -a "$GITHUB_STEP_SUMMARY"
       - name: Report loudness (target about -14 LUFS for YouTube)
-        run: ffmpeg -hide_banner -i "ScuderiaFerrari-x${{ inputs.scale }}.mp4" -af loudnorm=print_format=summary -f null - 2>&1 | grep -E "Input (Integrated|True Peak)" | tee -a "$GITHUB_STEP_SUMMARY"
+        run: ffmpeg -hide_banner -i "ScuderiaFerrari-x${{ inputs.scale }}-60fps.mp4" -af loudnorm=print_format=summary -f null - 2>&1 | grep -E "Input (Integrated|True Peak)" | tee -a "$GITHUB_STEP_SUMMARY"
       - uses: actions/upload-artifact@v4
         with:
-          name: ScuderiaFerrari-x${{ inputs.scale }}
-          path: ScuderiaFerrari-x${{ inputs.scale }}.mp4
+          name: ScuderiaFerrari-x${{ inputs.scale }}-60fps
+          path: ScuderiaFerrari-x${{ inputs.scale }}-60fps.mp4
           retention-days: 14

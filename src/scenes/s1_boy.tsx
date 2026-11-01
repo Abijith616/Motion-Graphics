@@ -1,5 +1,6 @@
 import React from 'react';
-import {interpolate, useCurrentFrame} from 'remotion';
+import {interpolate} from 'remotion';
+import {useCurrentFrame} from '../frame';
 import {Pop, Place, Words, Glow} from '../components/Base';
 import {Book} from '../components/Art';
 import {Char, Crowd, CITIES, Factory, ItalyMap, Label, Mosquito, Moon, MotorPaper, VintageCar, Wrench} from '../components/Ferrari';

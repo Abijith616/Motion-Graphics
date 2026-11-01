@@ -5,7 +5,8 @@
  * the camera dives into the "?"'s dot, which becomes the cyan N of NOOSPHERE.
  */
 import React from 'react';
-import {AbsoluteFill, Easing, interpolate, random, useCurrentFrame} from 'remotion';
+import {AbsoluteFill, Easing, interpolate, random} from 'remotion';
+import {useCurrentFrame} from '../frame';
 import {interpolatePath} from '@remotion/paths';
 import {BRAND, tagFont, wordFont} from '../brand/Noosphere';
 import {Char, F1Car, Factory, FerrariWord, Car125, Shield, Workshop} from '../components/Ferrari';

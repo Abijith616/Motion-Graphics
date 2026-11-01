@@ -1,5 +1,6 @@
 import React from 'react';
-import {interpolate, useCurrentFrame} from 'remotion';
+import {interpolate} from 'remotion';
+import {useCurrentFrame} from '../frame';
 import {Glow, Place, Pop} from '../components/Base';
 import {Car125, Char, Crowd, DinnerTable, Engine, F1Car, Factory, FerrariWord, Lira, MoneyBag, RoadCar, Shield, Tyre, Truck, VintageCar} from '../components/Ferrari';
 import {Arrow, Caption, Cross, Ground, Road, SpeedLines, Sparkles, Title} from '../components/Kit';

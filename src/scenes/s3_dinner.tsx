@@ -1,5 +1,6 @@
 import React from 'react';
-import {interpolate, random, useCurrentFrame} from 'remotion';
+import {interpolate, random} from 'remotion';
+import {useCurrentFrame} from '../frame';
 import {Glow, Place, Pop, Words} from '../components/Base';
 import {Calendar, Pin, Phone} from '../components/Art';
 import {Char, Clipboard, Contract, Crate, DinnerTable, Horse, Label, Lira, MoneyBag, PartyHQ, Plate, Shield, Stable, Truck, VintageCar, Workshop, Trophy} from '../components/Ferrari';

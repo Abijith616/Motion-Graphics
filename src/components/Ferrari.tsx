@@ -1,5 +1,6 @@
 import React from 'react';
-import {Img, staticFile, useCurrentFrame} from 'remotion';
+import {Img, staticFile} from 'remotion';
+import {useCurrentFrame} from '../frame';
 import {HORSE, HORSE_T, HORSE_VB, SHIELD, SHIELD_T, SHIELD_VB} from '../brand/ferrariPaths';
 import {C, body, head, serif} from '../theme';
 import {Svg} from './Art';

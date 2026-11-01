@@ -47,6 +47,9 @@ export const C = {
   skin2: '#E3AE8A',
 };
 
-export const FPS = 30;
+/** Render frame rate (what the composition outputs). */
+export const FPS = 60;
+/** Animation clock: all scene timing is written in 30-fps units; at 60 fps it advances in half-steps. */
+export const ANIM_FPS = 30;
 export const W = 1920;
 export const H = 1080;

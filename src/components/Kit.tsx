@@ -1,5 +1,6 @@
 import React from 'react';
-import {interpolate, random, useCurrentFrame} from 'remotion';
+import {interpolate, random} from 'remotion';
+import {useCurrentFrame} from '../frame';
 import {f, pop, prog} from '../lib';
 import {C, H, W, body, head, serif} from '../theme';
 

@@ -1,5 +1,6 @@
 import React from 'react';
-import {AbsoluteFill, Html5Audio, Sequence, interpolate, interpolateColors, staticFile, useCurrentFrame} from 'remotion';
+import {AbsoluteFill, Html5Audio, Sequence, interpolate, interpolateColors, staticFile, useVideoConfig} from 'remotion';
+import {useCurrentFrame} from './frame';
 import {Stage} from './components/Base';
 import {Horse, PartyHQ} from './components/Ferrari';
 import {AUDIO_END, Q} from './cues';
@@ -72,6 +73,9 @@ export const Video: React.FC = () => {
   const tint = interpolateColors(k, [0, 1], [prev.tint ?? C.bg2, cur.tint ?? C.bg2]);
   const glow = interpolateColors(k, [0, 1], [prev.glow ?? C.bg3, cur.glow ?? C.bg3]);
   const total = f(DURATION_SEC);
+  const {fps} = useVideoConfig();
+  const rf = (sec: number) => Math.round(sec * fps); // seconds → render frames
+  const totalR = rf(DURATION_SEC);
   const main = f(COLD_END);
 
   return (
@@ -99,9 +103,9 @@ export const Video: React.FC = () => {
       )}
 
       <Html5Audio src={staticFile('voiceover.mp3')} volume={1} />
-      <Html5Audio src={staticFile('music.flac')} volume={(fr) => interpolate(fr, [0, 15, total - 90, total], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})} />
+      <Html5Audio src={staticFile('music.flac')} volume={(fr) => interpolate(fr, [0, rf(0.5), totalR - rf(3), totalR], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})} />
       {[...COLD_SFX, ...SCENES.flatMap((s) => s.sfx ?? [])].map((x, i) => (
-        <Sequence key={`sfx${i}`} from={Math.max(0, f(x.t))} durationInFrames={f(4)} layout="none">
+        <Sequence key={`sfx${i}`} from={Math.max(0, rf(x.t))} durationInFrames={rf(4)} layout="none">
           <Html5Audio src={staticFile(`sfx/${x.s}.wav`)} volume={x.v ?? 0.18} />
         </Sequence>
       ))}

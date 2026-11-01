@@ -1,5 +1,6 @@
 import React from 'react';
-import {AbsoluteFill, random, useCurrentFrame} from 'remotion';
+import {AbsoluteFill, random} from 'remotion';
+import {useCurrentFrame} from '../frame';
 import {C, H, W, body, head} from '../theme';
 import {bob, f, pop, prog} from '../lib';
 
