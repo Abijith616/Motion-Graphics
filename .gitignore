@@ -1,0 +1,25 @@
+# dependencies — installed fresh in CI with `npm ci`
+node_modules/
+
+# render output
+out/
+*.mp4
+
+# previous (FreeBSD) video project — not part of this repo
+Released/
+
+# unused / large source assets
+0070-landscape-scenery-illustrations.zip
+DrawKit Vector Illustration Landscape & Scenery/
+public/music.wav
+
+# local / OS / editor junk
+.DS_Store
+*.log
+.remotion/
+.vscode/
+.idea/
+__pycache__/
+*.pyc
+.venv/
+venv/

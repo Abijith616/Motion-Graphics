@@ -1,0 +1,102 @@
+name: Render video
+
+on:
+  workflow_dispatch:
+    inputs:
+      scale:
+        description: 'Output scale (2 = 3840x2160 4K, 1 = 1920x1080)'
+        type: choice
+        options: ['2', '1']
+        default: '2'
+      crf:
+        description: 'H.264 quality (lower = better/larger, 16 is visually lossless)'
+        default: '16'
+
+env:
+  COMP: ScuderiaFerrari
+  CHUNKS: 8
+
+jobs:
+  # ---- video in parallel chunks (each renders a frame range, muted)
+  video:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    strategy:
+      fail-fast: true
+      matrix:
+        chunk: [0, 1, 2, 3, 4, 5, 6, 7]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx remotion browser ensure
+      - name: Frame range for this chunk
+        id: range
+        run: |
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json, math, os
+          end = json.load(open('src/cues.json'))['_end']
+          total = math.ceil((end + 4.5) * 30)          # must match DURATION_SEC in src/Video.tsx
+          n = int(os.environ['CHUNKS']); i = int(${{ matrix.chunk }})
+          size = math.ceil(total / n)
+          a, b = i * size, min(total, (i + 1) * size) - 1
+          print(f'frames={a}-{b}')
+          PY
+      - name: Render chunk ${{ matrix.chunk }} (${{ steps.range.outputs.frames }})
+        run: |
+          mkdir -p out
+          npx remotion render src/index.ts "$COMP" "out/chunk-${{ matrix.chunk }}.mp4" \
+            --frames=${{ steps.range.outputs.frames }} --muted \
+            --scale=${{ inputs.scale }} --codec=h264 --crf=${{ inputs.crf }} \
+            --gl=swangle --concurrency=4 --log=info
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chunk-${{ matrix.chunk }}
+          path: out/chunk-${{ matrix.chunk }}.mp4
+          retention-days: 2
+
+  # ---- full soundtrack (voice-over + music + sfx), audio only
+  audio:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx remotion browser ensure
+      - run: npx remotion render src/index.ts "$COMP" out/audio.wav --codec=wav --gl=swangle
+      - uses: actions/upload-artifact@v4
+        with:
+          name: audio
+          path: out/audio.wav
+          retention-days: 2
+
+  # ---- join chunks, add audio, report loudness, publish
+  assemble:
+    needs: [video, audio]
+    runs-on: ubuntu-latest
+    steps:
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - uses: actions/download-artifact@v4
+        with:
+          path: parts
+          merge-multiple: true
+      - name: Concatenate + mux
+        run: |
+          for i in $(seq 0 $((CHUNKS - 1))); do echo "file 'parts/chunk-$i.mp4'"; done > list.txt
+          ffmpeg -y -f concat -safe 0 -i list.txt -i parts/audio.wav \
+            -map 0:v -map 1:a -c:v copy -c:a aac -b:a 320k -movflags +faststart \
+            "ScuderiaFerrari-x${{ inputs.scale }}.mp4"
+      - name: Report loudness (target about -14 LUFS for YouTube)
+        run: ffmpeg -hide_banner -i "ScuderiaFerrari-x${{ inputs.scale }}.mp4" -af loudnorm=print_format=summary -f null - 2>&1 | grep -E "Input (Integrated|True Peak)" | tee -a "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ScuderiaFerrari-x${{ inputs.scale }}
+          path: ScuderiaFerrari-x${{ inputs.scale }}.mp4
+          retention-days: 14
