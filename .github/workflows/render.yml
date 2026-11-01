@@ -1,20 +1,14 @@
 name: Render video (4K 60fps)
 
 on:
-  workflow_dispatch:
-    inputs:
-      scale:
-        description: 'Output scale (2 = 3840x2160 4K, 1 = 1920x1080). Always 60 fps.'
-        type: choice
-        options: ['2', '1']
-        default: '2'
-      crf:
-        description: 'H.264 quality (lower = better/larger, 16 is visually lossless)'
-        default: '16'
+  workflow_dispatch: # run from the Actions tab — always renders the full original video, 3840x2160 @ 60 fps
 
 env:
   COMP: ScuderiaFerrari
   CHUNKS: 16
+  SCALE: 2      # 1920x1080 composition x2 = 3840x2160
+  CRF: 16       # visually lossless H.264
+  OUT: ScuderiaFerrari-4K-60fps.mp4
 
 jobs:
   # ---- video in parallel chunks (each renders a frame range, muted)
@@ -50,7 +44,7 @@ jobs:
           mkdir -p out
           npx remotion render src/index.ts "$COMP" "out/chunk-${{ matrix.chunk }}.mp4" \
             --frames=${{ steps.range.outputs.frames }} --muted \
-            --scale=${{ inputs.scale }} --codec=h264 --crf=${{ inputs.crf }} \
+            --scale=$SCALE --codec=h264 --crf=$CRF \
             --gl=swangle --concurrency=100% --log=info
       - uses: actions/upload-artifact@v4
         with:
@@ -81,6 +75,9 @@ jobs:
   assemble:
     needs: [video, audio]
     runs-on: ubuntu-latest
+    permissions:
+      actions: write   # to delete the intermediate artifacts afterwards
+      contents: read
     steps:
       - run: sudo apt-get update && sudo apt-get install -y ffmpeg
       - uses: actions/download-artifact@v4
@@ -92,12 +89,19 @@ jobs:
           for i in $(seq 0 $((CHUNKS - 1))); do echo "file 'parts/chunk-$i.mp4'"; done > list.txt
           ffmpeg -y -f concat -safe 0 -i list.txt -i parts/audio.wav \
             -map 0:v -map 1:a -c:v copy -c:a aac -b:a 320k -movflags +faststart \
-            "ScuderiaFerrari-x${{ inputs.scale }}-60fps.mp4"
-          ffprobe -v error -select_streams v:0 -show_entries stream=width,height,r_frame_rate,nb_frames -of compact "ScuderiaFerrari-x${{ inputs.scale }}-60fps.mp4" | tee -a "$GITHUB_STEP_SUMMARY"
+            "$OUT"
+          ffprobe -v error -select_streams v:0 -show_entries stream=width,height,r_frame_rate,nb_frames -of compact "$OUT" | tee -a "$GITHUB_STEP_SUMMARY"
       - name: Report loudness (target about -14 LUFS for YouTube)
-        run: ffmpeg -hide_banner -i "ScuderiaFerrari-x${{ inputs.scale }}-60fps.mp4" -af loudnorm=print_format=summary -f null - 2>&1 | grep -E "Input (Integrated|True Peak)" | tee -a "$GITHUB_STEP_SUMMARY"
+        run: ffmpeg -hide_banner -i "$OUT" -af loudnorm=print_format=summary -f null - 2>&1 | grep -E "Input (Integrated|True Peak)" | tee -a "$GITHUB_STEP_SUMMARY"
       - uses: actions/upload-artifact@v4
         with:
-          name: ScuderiaFerrari-x${{ inputs.scale }}-60fps
-          path: ScuderiaFerrari-x${{ inputs.scale }}-60fps.mp4
+          name: ScuderiaFerrari-4K-60fps
+          path: ${{ env.OUT }}
           retention-days: 14
+      # only the finished video stays on the run page
+      - uses: geekyeggo/delete-artifact@v5
+        with:
+          name: |
+            chunk-*
+            audio
+          failOnError: false
